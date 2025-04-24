@@ -1,2 +1,2 @@
-# xmake-ng
+# make-ng
 build-tool
