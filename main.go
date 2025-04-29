@@ -6,10 +6,6 @@ import (
 )
 
 func main() {
-	version, err := osutils.WinOS()
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
+	version, _ := osutils.WinOS()
 	fmt.Println(version)
 }
