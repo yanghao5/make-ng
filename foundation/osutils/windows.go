@@ -2,31 +2,15 @@ package osutils
 
 import (
 	"fmt"
-	"unsafe"
+	"runtime"
 
 	"golang.org/x/sys/windows"
 )
 
 func WinOS() (string, error) {
-	type OSVersionInfoEx struct {
-		OSVersionInfoSize uint32
-		MajorVersion      uint32
-		MinorVersion      uint32
-		BuildNumber       uint32
-		PlatformId        uint32
-		CSDVersion        [128]uint16
+	if runtime.GOOS != "windows" {
+		return "", fmt.Errorf("\033[31merror\033[0m: WinOS() unsupported OS: %s, only Windows is supported", runtime.GOOS)
 	}
-
-	kernel32 := windows.NewLazySystemDLL("kernel32.dll")
-	getVersionEx := kernel32.NewProc("GetVersionExW")
-
-	var osvi OSVersionInfoEx
-	osvi.OSVersionInfoSize = uint32(unsafe.Sizeof(osvi))
-
-	ret, _, err := getVersionEx.Call(uintptr(unsafe.Pointer(&osvi)))
-	if ret == 0 {
-		return "", fmt.Errorf("failed to get version: %v", err)
-	}
-
-	return fmt.Sprintf("Windows Version: %d.%d, Build: %d", osvi.MajorVersion, osvi.MinorVersion, osvi.BuildNumber), nil
+	maj, min, patch := windows.RtlGetNtVersionNumbers()
+	return fmt.Sprintf("%d.%d.%d", maj, min, patch), nil
 }
