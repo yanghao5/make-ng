@@ -1,3 +1,5 @@
+//go:build linux || freebsd || openbsd || netbsd
+
 package osutils
 
 import "golang.org/x/sys/unix"

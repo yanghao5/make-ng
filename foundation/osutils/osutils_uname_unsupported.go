@@ -1,10 +1,8 @@
-//go:build !linux
+//go:build windows
 
 package osutils
 
-import (
-	"errors"
-)
+import "errors"
 
 // utsName represents the system name structure. It is defined here to make it
 // portable as it is available on Linux but not on Windows.
